@@ -73,12 +73,12 @@ namespace DungeonsAndDragonsInterface
                 return null;
             }
         }
-        public static async Task<List<LevelsForClass>> GetLevelsForClassAsync(string path)
+        public static async Task<List<LevelsForClass>> GetLevelsForClassAsync(string name)
         {
-            string uri = string.Concat(Url, path);
+            string uri = string.Concat(Url, $"/api/classes/{name.Replace(' ', '-').ToLower()}/levels");
             if (GeneratedLevels.ContainsKey(uri))
             {
-                return GeneratedLevels[path];
+                return GeneratedLevels[uri];
             }
             else
             {
@@ -88,10 +88,11 @@ namespace DungeonsAndDragonsInterface
 
                     for (int i = 1; i <= 20; i++)
                     {
-                        levels.Add(await Task.Run(async () => JsonConvert.DeserializeObject<LevelsForClass>(await client.GetStringAsync(string.Concat(uri, $"/{1}")))));
+                        levels.Add(await Task.Run(async () => JsonConvert.DeserializeObject<LevelsForClass>(await client.GetStringAsync(string.Concat(uri, $"/{i}")))));
                     }
                     if (levels.Count > 0)
                     {
+                        GeneratedLevels.Add(uri, levels);
                         return levels;
                     }
                 }

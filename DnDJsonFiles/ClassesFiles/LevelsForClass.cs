@@ -19,17 +19,16 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.ClassesFiles
         public int ProfBonus { get; set; }
 
         [JsonProperty("feature_choices")]
-        public List<APIReference> FeatureChoices = new List<APIReference>();
+        public List<APIReference> FeatureChoices = new();
 
         [JsonProperty("features")]
-        public List<APIReference> Features = new List<APIReference>();
+        public List<APIReference> Features = new();
 
         [JsonProperty("spellcasting")]
         public SpellSlotsPerLevel SpellSlotsPerLevel { get; set; }
 
         [JsonProperty("class_specific")]
         public ClassSpecific ClassSpecific { get; set; }
-
 
         [JsonProperty("class")]
         public APIReference Class { get; set; }

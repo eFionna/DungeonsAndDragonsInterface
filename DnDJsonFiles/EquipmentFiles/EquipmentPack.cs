@@ -13,6 +13,6 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
         [JsonProperty("cost")]
         public Cost Cost { get; set; }
         [JsonProperty("contents")]
-        public List<APIReference> Contents = new List<APIReference>();
+        public List<APIReference> Contents = new();
     }
 }
