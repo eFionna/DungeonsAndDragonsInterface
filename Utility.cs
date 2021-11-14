@@ -12,9 +12,9 @@ namespace DungeonsAndDragonsInterface
         const string Url = "https://www.dnd5eapi.co";
         private static readonly JsonSerializerSettings SerializerSettings = new() { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.Indented };
         private static readonly HttpClient client = new();
-        private static Dictionary<string, Spell> GeneratedSpells = new();
-        private static Dictionary<string, Class> GeneratedClasses = new();
-        private static Dictionary<string, List<LevelsForClass>> GeneratedLevels = new();
+        private static Dictionary<string, Spell> GeneratedSpells;
+        private static Dictionary<string, Class> GeneratedClasses;
+        private static Dictionary<string, List<LevelsForClass>> GeneratedLevels;
 
         public static async Task<string> GetRawJson(string item)
         {
@@ -23,12 +23,20 @@ namespace DungeonsAndDragonsInterface
 
             return responseBody;
         }
-        public static async Task<Spell> GetSpellAsync(string name)
+        public static async Task<Spell> GetSpellAsync(string name, bool saveResultInMemory = true)
         {
-            string uri = string.Concat(Url, "/api/spells/", name.Replace(' ', '-').ToLower());
-            if (GeneratedSpells.ContainsKey(uri))
+            if (saveResultInMemory && GeneratedSpells == null)
             {
-                return GeneratedSpells[uri];
+                GeneratedSpells = new();
+            }
+            string uri = string.Concat(Url, "/api/spells/", name.Replace(' ', '-').ToLower());
+            if (GeneratedSpells != null)
+            {
+                if (GeneratedSpells.ContainsKey(uri))
+                {
+                    return GeneratedSpells[uri];
+                }
+                return null;
             }
             else
             {
@@ -37,7 +45,10 @@ namespace DungeonsAndDragonsInterface
                     Spell spell = await Task.Run(async () => JsonConvert.DeserializeObject<Spell>(await client.GetStringAsync(uri), SerializerSettings));
                     if (spell != null)
                     {
-                        GeneratedSpells.Add(uri, spell);
+                        if (saveResultInMemory)
+                        {
+                            GeneratedSpells.Add(uri, spell);
+                        }
                         return spell;
                     }
                 }
@@ -48,12 +59,20 @@ namespace DungeonsAndDragonsInterface
                 return null;
             }
         }
-        public static async Task<Class> GetClassAsync(string name)
+        public static async Task<Class> GetClassAsync(string name, bool saveResultInMemory = true)
         {
-            string uri = string.Concat(Url, "/api/classes/", name.Replace(' ', '-').ToLower());
-            if (GeneratedSpells.ContainsKey(uri))
+            if (saveResultInMemory && GeneratedClasses == null)
             {
-                return GeneratedClasses[uri];
+                GeneratedClasses = new();
+            }
+            string uri = string.Concat(Url, "/api/classes/", name.Replace(' ', '-').ToLower());
+            if (GeneratedClasses != null)
+            {
+                if (GeneratedSpells.ContainsKey(uri))
+                {
+                    return GeneratedClasses[uri];
+                }
+                return null;
             }
             else
             {
@@ -62,7 +81,10 @@ namespace DungeonsAndDragonsInterface
                     Class clas = await Task.Run(async () => JsonConvert.DeserializeObject<Class>(await client.GetStringAsync(uri), SerializerSettings));
                     if (clas != null)
                     {
-                        GeneratedClasses.Add(uri, clas);
+                        if (saveResultInMemory)
+                        {
+                            GeneratedClasses.Add(uri, clas);
+                        }
                         return clas;
                     }
                 }
@@ -73,12 +95,20 @@ namespace DungeonsAndDragonsInterface
                 return null;
             }
         }
-        public static async Task<List<LevelsForClass>> GetLevelsForClassAsync(string name)
+        public static async Task<List<LevelsForClass>> GetLevelsForClassAsync(string name, bool saveResultInMemory = true)
         {
-            string uri = string.Concat(Url, $"/api/classes/{name.Replace(' ', '-').ToLower()}/levels");
-            if (GeneratedLevels.ContainsKey(uri))
+            if (saveResultInMemory && GeneratedLevels == null)
             {
-                return GeneratedLevels[uri];
+                GeneratedLevels = new();
+            }
+            string uri = string.Concat(Url, $"/api/classes/{name.Replace(' ', '-').ToLower()}/levels");
+            if (GeneratedLevels != null)
+            {
+                if (GeneratedLevels.ContainsKey(uri))
+                {
+                    return GeneratedLevels[uri];
+                }
+                return null;
             }
             else
             {
@@ -92,7 +122,10 @@ namespace DungeonsAndDragonsInterface
                     }
                     if (levels.Count > 0)
                     {
-                        GeneratedLevels.Add(uri, levels);
+                        if (saveResultInMemory)
+                        {
+                            GeneratedLevels.Add(uri, levels);
+                        }
                         return levels;
                     }
                 }
