@@ -16,7 +16,7 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public Options Options { get; set; }
 
         [JsonProperty("damage")]
-        public List<Damage> Damage = new List<Damage>();
+        public List<Damage> Damage = new();
 
         [JsonProperty("attack_bonus")]
         public int AttackBonus { get; set; }

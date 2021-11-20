@@ -10,6 +10,6 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles
         public int Count { get; set; }
 
         [JsonProperty("results")]
-        public List<APIReference> Results = new List<APIReference>();
+        public List<APIReference> Results = new();
     }
 }

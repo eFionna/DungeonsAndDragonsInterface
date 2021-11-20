@@ -20,10 +20,10 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public string Alignment { get; set; }
 
         [JsonProperty("armor_class")]
-        public int ArmorClass { get; set; }
+        public int? ArmorClass { get; set; }
 
         [JsonProperty("hit_points")]
-        public int HitPoints { get; set; }
+        public int? HitPoints { get; set; }
 
         [JsonProperty("hit_dice")]
         public string HitDice { get; set; }
@@ -34,37 +34,37 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public Speed Speed { get; set; }
 
         [JsonProperty("strength")]
-        public int Strength { get; set; }
+        public int? Strength { get; set; }
 
         [JsonProperty("dexterity")]
-        public int Dexterity { get; set; }
+        public int? Dexterity { get; set; }
 
         [JsonProperty("constitution")]
-        public int Constitution { get; set; }
+        public int? Constitution { get; set; }
 
         [JsonProperty("intelligence")]
-        public int Intelligence { get; set; }
+        public int? Intelligence { get; set; }
 
         [JsonProperty("wisdom")]
-        public int Wisdom { get; set; }
+        public int? Wisdom { get; set; }
 
         [JsonProperty("charisma")]
-        public int Charisma { get; set; }
+        public int? Charisma { get; set; }
 
         [JsonProperty("proficiencies")]
-        public List<Proficiency> Proficiencies = new List<Proficiency>();
+        public List<Proficiency> Proficiencies = new();
 
         [JsonProperty("damage_vulnerabilities")]
-        public List<string> DamageVulnerabilities = new List<string>();
+        public List<string> DamageVulnerabilities = new();
 
         [JsonProperty("damage_resistances")]
-        public List<string> DamageResistances = new List<string>();
+        public List<string> DamageResistances = new();
 
         [JsonProperty("damage_immunities")]
-        public List<string> DamageImmunities = new List<string>();
+        public List<string> DamageImmunities = new();
 
         [JsonProperty("condition_immunities")]
-        public List<APIReference> ConditionImmunities = new List<APIReference>();
+        public List<APIReference> ConditionImmunities = new();
 
         [JsonProperty("senses")]
         public Senses Senses { get; set; }
@@ -73,19 +73,19 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public string Languages { get; set; }
 
         [JsonProperty("challenge_rating")]
-        public int ChallengeRating { get; set; }
+        public int? ChallengeRating { get; set; }
 
         [JsonProperty("xp")]
-        public int Xp { get; set; }
+        public int? Xp { get; set; }
 
         [JsonProperty("special_abilities")]
-        public List<SpecialAbility> SpecialAbilities { get; set; }
+        public List<SpecialAbility> SpecialAbilities = new();
 
         [JsonProperty("actions")]
-        public List<Action> Actions { get; set; }
+        public List<Action> Actions = new();
 
         [JsonProperty("legendary_actions")]
-        public List<LegendaryAction> LegendaryActions { get; set; }
+        public List<LegendaryAction> LegendaryActions = new();
     }
 
 }

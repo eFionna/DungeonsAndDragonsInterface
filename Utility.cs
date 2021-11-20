@@ -4,17 +4,19 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DungeonsAndDragonsInterface.DnDJsonFiles.SpellsFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.ClassesFiles;
+using DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles;
 
 namespace DungeonsAndDragonsInterface
 {
     public static class Utility
     {
         const string Url = "https://www.dnd5eapi.co";
-        private static readonly JsonSerializerSettings SerializerSettings = new() { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.Indented };
+        private static readonly JsonSerializerSettings SerializerSettings = new() { NullValueHandling = NullValueHandling.Ignore };
         private static readonly HttpClient client = new();
         private static Dictionary<string, Spell> GeneratedSpells;
         private static Dictionary<string, Class> GeneratedClasses;
         private static Dictionary<string, List<LevelsForClass>> GeneratedLevels;
+        private static Dictionary<string, Monsters> GeneratedMonsters;
 
         public static async Task<string> GetRawJson(string item)
         {
@@ -137,6 +139,42 @@ namespace DungeonsAndDragonsInterface
             }
 
 
+        }
+        public static async Task<Monsters> GetMonstersAsync(string name, bool saveResultInMemory = true)
+        {
+            if (saveResultInMemory && GeneratedMonsters == null)
+            {
+                GeneratedMonsters = new();
+            }
+            string uri = string.Concat(Url, "/api/monsters/", name.Replace(' ', '-').ToLower());
+            if (GeneratedMonsters != null)
+            {
+                if (GeneratedMonsters.ContainsKey(uri))
+                {
+                    return GeneratedMonsters[uri];
+                }
+                return null;
+            }
+            else
+            {
+                try
+                {
+                    Monsters monsters = await Task.Run(async () => JsonConvert.DeserializeObject<Monsters>(await client.GetStringAsync(uri), SerializerSettings));
+                    if (monsters != null)
+                    {
+                        if (saveResultInMemory)
+                        {
+                            GeneratedMonsters.Add(uri, monsters);
+                        }
+                        return monsters;
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+                return null;
+            }
         }
     }
 }

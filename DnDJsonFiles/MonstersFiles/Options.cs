@@ -9,7 +9,7 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public int Choose { get; set; }
 
         [JsonProperty("from")]
-        public List<Option> From = new List<Option>();
+        public List<List<Option>> From = new();
     }
     public class Option
     {
