@@ -20,6 +20,6 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
         [JsonProperty("range")]
         public Range Range { get; set; }
         [JsonProperty("properties")]
-        public List<APIReference> Properties = new List<APIReference>();
+        public List<APIReference> Properties = new();
     }
 }

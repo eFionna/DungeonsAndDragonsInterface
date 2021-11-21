@@ -7,6 +7,6 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
     public class WeaponProperties : APIReference
     {
         [JsonProperty("desc")]
-        public List<string> Description = new List<string>();
+        public List<string> Description = new();
     }
 }

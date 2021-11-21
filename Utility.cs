@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DungeonsAndDragonsInterface.DnDJsonFiles.SpellsFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.ClassesFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles;
+using DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles;
 
 namespace DungeonsAndDragonsInterface
 {
@@ -16,7 +17,8 @@ namespace DungeonsAndDragonsInterface
         private static Dictionary<string, Spell> GeneratedSpells;
         private static Dictionary<string, Class> GeneratedClasses;
         private static Dictionary<string, List<LevelsForClass>> GeneratedLevels;
-        private static Dictionary<string, Monsters> GeneratedMonsters;
+        private static Dictionary<string, Monster> GeneratedMonsters;
+        private static Dictionary<string, Equipment> GeneratedEquipments;
 
         public static async Task<string> GetRawJson(string item)
         {
@@ -140,7 +142,7 @@ namespace DungeonsAndDragonsInterface
 
 
         }
-        public static async Task<Monsters> GetMonstersAsync(string name, bool saveResultInMemory = true)
+        public static async Task<Monster> GetMonstersAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedMonsters == null)
             {
@@ -159,7 +161,7 @@ namespace DungeonsAndDragonsInterface
             {
                 try
                 {
-                    Monsters monsters = await Task.Run(async () => JsonConvert.DeserializeObject<Monsters>(await client.GetStringAsync(uri), SerializerSettings));
+                    Monster monsters = await Task.Run(async () => JsonConvert.DeserializeObject<Monster>(await client.GetStringAsync(uri), SerializerSettings));
                     if (monsters != null)
                     {
                         if (saveResultInMemory)
@@ -167,6 +169,42 @@ namespace DungeonsAndDragonsInterface
                             GeneratedMonsters.Add(uri, monsters);
                         }
                         return monsters;
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+                return null;
+            }
+        }
+        public static async Task<Equipment>GetEquipmentAsync(string name, bool saveResultInMemory = true)
+        {
+            if (saveResultInMemory && GeneratedEquipments == null)
+            {
+                GeneratedEquipments = new();
+            }
+            string uri = string.Concat(Url, "/api/equipment/", name.Replace(' ', '-').ToLower());
+            if (GeneratedEquipments != null)
+            {
+                if (GeneratedEquipments.ContainsKey(uri))
+                {
+                    return GeneratedEquipments[uri];
+                }
+                return null;
+            }
+            else
+            {
+                try
+                {
+                    Equipment equipment = await Task.Run(async () => JsonConvert.DeserializeObject<Equipment>(await client.GetStringAsync(uri), SerializerSettings));
+                    if (equipment != null)
+                    {
+                        if (saveResultInMemory)
+                        {
+                            GeneratedEquipments.Add(uri, equipment);
+                        }
+                        return equipment;
                     }
                 }
                 catch

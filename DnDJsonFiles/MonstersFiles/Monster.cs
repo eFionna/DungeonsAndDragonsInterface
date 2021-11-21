@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
 {
-    public class Monsters : APIReference
+    public class Monster : APIReference
     {
         [JsonProperty("size")]
         public string Size { get; set; }
@@ -34,22 +34,22 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public Speed Speed { get; set; }
 
         [JsonProperty("strength")]
-        public int? Strength { get; set; }
+        public int Strength { get; set; }
 
         [JsonProperty("dexterity")]
-        public int? Dexterity { get; set; }
+        public int Dexterity { get; set; }
 
         [JsonProperty("constitution")]
-        public int? Constitution { get; set; }
+        public int Constitution { get; set; }
 
         [JsonProperty("intelligence")]
-        public int? Intelligence { get; set; }
+        public int Intelligence { get; set; }
 
         [JsonProperty("wisdom")]
-        public int? Wisdom { get; set; }
+        public int Wisdom { get; set; }
 
         [JsonProperty("charisma")]
-        public int? Charisma { get; set; }
+        public int Charisma { get; set; }
 
         [JsonProperty("proficiencies")]
         public List<Proficiency> Proficiencies = new();
@@ -73,7 +73,7 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles
         public string Languages { get; set; }
 
         [JsonProperty("challenge_rating")]
-        public int? ChallengeRating { get; set; }
+        public float ChallengeRating { get; set; }
 
         [JsonProperty("xp")]
         public int? Xp { get; set; }

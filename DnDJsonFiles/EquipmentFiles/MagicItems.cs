@@ -10,6 +10,6 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
         public APIReference EquipmentCategory { get; set; }
 
         [JsonProperty("desc")]
-        public List<string> Description = new List<string>();
+        public List<string> Description = new();
     }
 }
