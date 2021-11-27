@@ -40,29 +40,25 @@ namespace DungeonsAndDragonsInterface
                 {
                     return GeneratedSpells[uri];
                 }
-                return null;
             }
-            else
+            try
             {
-                try
+                Spell spell = await Task.Run(async () => JsonConvert.DeserializeObject<Spell>(await client.GetStringAsync(uri), SerializerSettings));
+                if (spell != null)
                 {
-                    Spell spell = await Task.Run(async () => JsonConvert.DeserializeObject<Spell>(await client.GetStringAsync(uri), SerializerSettings));
-                    if (spell != null)
+                    if (saveResultInMemory)
                     {
-                        if (saveResultInMemory)
-                        {
-                            GeneratedSpells.Add(uri, spell);
-                        }
-                        return spell;
+                        GeneratedSpells.Add(uri, spell);
                     }
                 }
-                catch
-                {
-                    return null;
-                }
+                return spell;
+            }
+            catch
+            {
                 return null;
             }
         }
+
         public static async Task<Class> GetClassAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedClasses == null)
@@ -76,29 +72,25 @@ namespace DungeonsAndDragonsInterface
                 {
                     return GeneratedClasses[uri];
                 }
-                return null;
             }
-            else
+            try
             {
-                try
+                Class clas = await Task.Run(async () => JsonConvert.DeserializeObject<Class>(await client.GetStringAsync(uri), SerializerSettings));
+                if (clas != null)
                 {
-                    Class clas = await Task.Run(async () => JsonConvert.DeserializeObject<Class>(await client.GetStringAsync(uri), SerializerSettings));
-                    if (clas != null)
+                    if (saveResultInMemory)
                     {
-                        if (saveResultInMemory)
-                        {
-                            GeneratedClasses.Add(uri, clas);
-                        }
-                        return clas;
+                        GeneratedClasses.Add(uri, clas);
                     }
                 }
-                catch
-                {
-                    return null;
-                }
+                return clas;
+            }
+            catch
+            {
                 return null;
             }
         }
+
         public static async Task<List<LevelsForClass>> GetLevelsForClassAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedLevels == null)
@@ -112,36 +104,29 @@ namespace DungeonsAndDragonsInterface
                 {
                     return GeneratedLevels[uri];
                 }
-                return null;
             }
-            else
+            try
             {
-                try
+                List<LevelsForClass> levels = new();
+                for (int i = 1; i <= 20; i++)
                 {
-                    List<LevelsForClass> levels = new();
-
-                    for (int i = 1; i <= 20; i++)
+                    levels.Add(await Task.Run(async () => JsonConvert.DeserializeObject<LevelsForClass>(await client.GetStringAsync(string.Concat(uri, $"/{i}")))));
+                }
+                if (levels.Count > 0)
+                {
+                    if (saveResultInMemory)
                     {
-                        levels.Add(await Task.Run(async () => JsonConvert.DeserializeObject<LevelsForClass>(await client.GetStringAsync(string.Concat(uri, $"/{i}")))));
-                    }
-                    if (levels.Count > 0)
-                    {
-                        if (saveResultInMemory)
-                        {
-                            GeneratedLevels.Add(uri, levels);
-                        }
-                        return levels;
+                        GeneratedLevels.Add(uri, levels);
                     }
                 }
-                catch
-                {
-                    return null;
-                }
+                return levels.Count > 0 ? levels : null;
+            }
+            catch
+            {
                 return null;
             }
-
-
         }
+
         public static async Task<Monster> GetMonstersAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedMonsters == null)
@@ -155,30 +140,26 @@ namespace DungeonsAndDragonsInterface
                 {
                     return GeneratedMonsters[uri];
                 }
-                return null;
             }
-            else
+            try
             {
-                try
+                Monster monsters = await Task.Run(async () => JsonConvert.DeserializeObject<Monster>(await client.GetStringAsync(uri), SerializerSettings));
+                if (monsters != null)
                 {
-                    Monster monsters = await Task.Run(async () => JsonConvert.DeserializeObject<Monster>(await client.GetStringAsync(uri), SerializerSettings));
-                    if (monsters != null)
+                    if (saveResultInMemory)
                     {
-                        if (saveResultInMemory)
-                        {
-                            GeneratedMonsters.Add(uri, monsters);
-                        }
-                        return monsters;
+                        GeneratedMonsters.Add(uri, monsters);
                     }
                 }
-                catch
-                {
-                    return null;
-                }
+                return monsters;
+            }
+            catch
+            {
                 return null;
             }
         }
-        public static async Task<Equipment>GetEquipmentAsync(string name, bool saveResultInMemory = true)
+
+        public static async Task<Equipment> GetEquipmentAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedEquipments == null)
             {
@@ -191,26 +172,21 @@ namespace DungeonsAndDragonsInterface
                 {
                     return GeneratedEquipments[uri];
                 }
-                return null;
             }
-            else
+            try
             {
-                try
+                Equipment equipment = await Task.Run(async () => JsonConvert.DeserializeObject<Equipment>(await client.GetStringAsync(uri), SerializerSettings));
+                if (equipment != null)
                 {
-                    Equipment equipment = await Task.Run(async () => JsonConvert.DeserializeObject<Equipment>(await client.GetStringAsync(uri), SerializerSettings));
-                    if (equipment != null)
+                    if (saveResultInMemory)
                     {
-                        if (saveResultInMemory)
-                        {
-                            GeneratedEquipments.Add(uri, equipment);
-                        }
-                        return equipment;
+                        GeneratedEquipments.Add(uri, equipment);
                     }
                 }
-                catch
-                {
-                    return null;
-                }
+                return equipment;
+            }
+            catch
+            {
                 return null;
             }
         }
