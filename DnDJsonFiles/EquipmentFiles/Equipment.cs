@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
 {
-    public class Equipment : APIReference
+    public class Equipment : Item
     {
         [JsonProperty("weight")]
         public int Weight { get; set; }

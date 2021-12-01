@@ -6,6 +6,7 @@ using DungeonsAndDragonsInterface.DnDJsonFiles.SpellsFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.ClassesFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.MonstersFiles;
 using DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles;
+using Newtonsoft.Json.Linq;
 
 namespace DungeonsAndDragonsInterface
 {
@@ -18,7 +19,7 @@ namespace DungeonsAndDragonsInterface
         private static Dictionary<string, Class> GeneratedClasses;
         private static Dictionary<string, List<LevelsForClass>> GeneratedLevels;
         private static Dictionary<string, Monster> GeneratedMonsters;
-        private static Dictionary<string, Equipment> GeneratedEquipments;
+        private static Dictionary<string, Item> GeneratedEquipments;
 
         public static async Task<string> GetRawJson(string item)
         {
@@ -159,7 +160,7 @@ namespace DungeonsAndDragonsInterface
             }
         }
 
-        public static async Task<Equipment> GetEquipmentAsync(string name, bool saveResultInMemory = true)
+        public static async Task<Item> GetItemAsync(string name, bool saveResultInMemory = true)
         {
             if (saveResultInMemory && GeneratedEquipments == null)
             {
@@ -175,15 +176,78 @@ namespace DungeonsAndDragonsInterface
             }
             try
             {
-                Equipment equipment = await Task.Run(async () => JsonConvert.DeserializeObject<Equipment>(await client.GetStringAsync(uri), SerializerSettings));
-                if (equipment != null)
+                JObject json = JObject.Parse(await client.GetStringAsync(uri), new JsonLoadSettings()
+                {
+                    CommentHandling = CommentHandling.Load,
+                });
+                string category = json["equipment_category"].ToString();
+                EquipmentCategory equipmentCategory = JsonConvert.DeserializeObject<EquipmentCategory>(category);
+                Item item = null;
+                switch (equipmentCategory.Name)
+                {
+                    case "Armor":
+                    case "Heavy Armor":
+                    case "Light Armor":
+                    case "Medium Armor":
+                    case "Shields":
+                        item = JsonConvert.DeserializeObject<Armor>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Adventuring Gear":
+                    case "Ammunition":
+                    case "Arcane Foci":
+                    case "Druidic Foci":
+                    case "Holy Symbols":
+                    case "Kits":
+                    case "Tack, Harness, and Drawn Vehicles":
+                        item = JsonConvert.DeserializeObject<Gear>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Tools":
+                    case "Gaming Sets":
+                    case "Musical Instruments":
+                    case "Other Tools":
+                        item = JsonConvert.DeserializeObject<Tool>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Equipment Packs":
+                        item = JsonConvert.DeserializeObject<EquipmentPack>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Land Vehicle":
+                    case "Mounts and Other Animals":
+                    case "Mounts and Vehicles":
+                    case "Waterborne Vehicles":
+                        item = JsonConvert.DeserializeObject<Vehicle>(json.ToString(), SerializerSettings);
+                        break ;
+                    case "Martial Melee Weapons":
+                    case "Martial Ranged Weapons":
+                    case "Martial Weapons":
+                    case "Melee Weapons":
+                    case "Ranged Weapons":
+                    case "Simple Melee Weapons":
+                    case "Simple Ranged Weapons":
+                    case "Simple Weapons":
+                    case "Weapon":
+                        item = JsonConvert.DeserializeObject<Weapon>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Potion":
+                    case "Ring":
+                    case "Rod":
+                    case "Scroll":
+                    case "Staff":
+                    case "Wand":
+                    case "Wondrous Items":
+                        item = JsonConvert.DeserializeObject<MagicItem>(json.ToString(), SerializerSettings);
+                        break;
+                    case "Standard Gear":
+                        item = JsonConvert.DeserializeObject<Equipment>(json.ToString(), SerializerSettings);
+                        break;
+                }
+                if (item != null)
                 {
                     if (saveResultInMemory)
                     {
-                        GeneratedEquipments.Add(uri, equipment);
+                        GeneratedEquipments.Add(uri, item);
                     }
                 }
-                return equipment;
+                return item;
             }
             catch
             {

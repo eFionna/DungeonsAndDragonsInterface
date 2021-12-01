@@ -1,5 +1,6 @@
 ﻿using DungeonsAndDragonsInterface.DnDJsonFiles.Common_Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
 {
@@ -7,5 +8,7 @@ namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
     {
         [JsonProperty("gear_category")]
         public APIReference GearCategory { get; set; }
+        [JsonProperty("desc")]
+        public List<string> Description = new();
     }
 }

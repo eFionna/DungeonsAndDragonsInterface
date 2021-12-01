@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DungeonsAndDragonsInterface.DnDJsonFiles.EquipmentFiles
 {
-    public class MagicItems : APIReference
+    public class MagicItem : Item
     {
         [JsonProperty("equipment_category")]
         public APIReference EquipmentCategory { get; set; }
